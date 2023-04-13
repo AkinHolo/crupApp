@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import PostMessage from '../models/postMessage'
+import PostMessage from '../models/postMessage.js'
 
 
             //getPost//
@@ -40,7 +40,7 @@ export const updatePost = async(req, res) => {
 
         if( !mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id')
 
-        const updatedPost = await PostMessage.findOneAndUpdate(_id, {...post, _id},
+        const updatedPost = await PostMessage.findByIdAndUpdate(_id, {...post, _id},
             {new: true});
 
             res.json(updatedPost);
@@ -51,11 +51,11 @@ export const updatePost = async(req, res) => {
             //deletePost//
 export const deletePost = async(req, res) => {
 
-        const { id } = req.params;
+        const { id: _id } = req.params;
         
-            if( !mongoose.Types.objectId.isValid(id)) return res.status(404).send('No post with that id');
+            if( !mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
 
-            await PostMessage.findByIdAndDelete(id);
+            await PostMessage.findByIdAndDelete(_id);
 
             res.json({message: 'Post deleted successfully'});
 };
@@ -63,9 +63,9 @@ export const deletePost = async(req, res) => {
 
             //likeCount//
 export const likePost = async(req, res) => {
-    const { id } = req.params;
+    const { id:_id } = req.params;
 
-        if( !mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
+        if( !mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
 
         const post = await PostMessage.findById(id);
 
